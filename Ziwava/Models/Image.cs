@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 
@@ -14,6 +15,7 @@ namespace Ziwava.Models
         public int indawoId { get; set; }
         [Required]
         public string imgPath { get; set; }
+        [NotMapped]
         public HttpPostedFileBase imageUpload { get; set; }
     }
 }

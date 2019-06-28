@@ -14,8 +14,6 @@ namespace Ziwava.Models
         {
             images = new List<Image>();
             imgPath = "~/Content/user.png";
-            distance = 0;
-            geoLocation = null;
         }
         [Required]
         public int id { get; set; }
@@ -26,13 +24,17 @@ namespace Ziwava.Models
         [Required]
         public string lon { get; set; }
         [Required]
+        public string address { get; set; }
+        [Required]
         public string imgPath { get; set; }
+        [Required]
+        public string instaHandle { get; set; }
         public List<Image> images { get; set; }
         [NotMapped]
         public HttpPostedFileBase imageUpload { get; set; }
         [NotMapped]
         public double distance { get; set; }
-        [NotMapped]
+        
         public DbGeography geoLocation { get; set; }
     }
 }
