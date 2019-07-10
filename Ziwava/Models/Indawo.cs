@@ -18,6 +18,12 @@ namespace Ziwava.Models
         [Required]
         public int id { get; set; }
         [Required]
+        public string type { get; set; }
+        [Required]
+        public double rating { get; set; }
+        [Required]
+        public double entranceFee { get; set; }
+        [Required]
         public string name { get; set; }
         [Required]
         public string lat { get; set; }

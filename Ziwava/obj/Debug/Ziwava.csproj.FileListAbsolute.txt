@@ -271,3 +271,6 @@ C:\Users\Siya\Documents\Ziwava\Ziwava\bin\Microsoft.AI.Web.xml
 C:\Users\Siya\Documents\Ziwava\Ziwava\obj\Debug\Ziwava.csprojResolveAssemblyReference.cache
 C:\Users\Siya\Documents\Ziwava\Ziwava\obj\Debug\Ziwava.dll
 C:\Users\Siya\Documents\Ziwava\Ziwava\obj\Debug\Ziwava.pdb
+C:\Users\Siya\Documents\Ziwava\Ziwava\bin\System.Web.Cors.dll
+C:\Users\Siya\Documents\Ziwava\Ziwava\bin\System.Web.Http.Cors.dll
+C:\Users\Siya\Documents\Ziwava\Ziwava\bin\System.Web.Http.Cors.xml

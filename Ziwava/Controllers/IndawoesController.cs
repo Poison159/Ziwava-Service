@@ -11,26 +11,45 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Cors;
 using System.Web.Http.Description;
 using Ziwava.Models;
 
 namespace Ziwava.Controllers
 {
+    [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class IndawoesController : ApiController
     {
         private ZiwavaContext db = new ZiwavaContext();
 
         // GET: api/Indawoes
-        public List<Indawo> GetIndawoes(string userLocation, string distance)
+        public List<Indawo> GetIndawoes(string userLocation, string distance, string vibe, string filter)
         {
             var lon = userLocation.Split(',')[0];
             var lat = userLocation.Split(',')[1];
-
-            var listOfIndawoes = Helper.GetNearByLocations(lat, lon,Convert.ToInt32(distance), db); // TODO: Use distance to narrow search
+            var vibes = new List<string>() {"Chilled","Club","Outdoor"};
+            var filters = new List<string>() { "distance", "rating", "damage" };
+            var locations = new List<Indawo>();
+            if (!string.IsNullOrEmpty(vibe) && vibes.Contains(vibe))
+            {
+                locations = db.Indawoes.Where(x => x.type == vibe).ToList();
+            }
+            else {
+                locations = db.Indawoes.ToList();
+            }
+            var listOfIndawoes = Helper.GetNearByLocations(lat, lon,Convert.ToInt32(distance), locations, vibe); // TODO: Use distance to narrow search
             //var listOfIndawoes = LoadJson(@"C:\Users\sibongisenib\Documents\ImportantRecentProjects\listOfIndawoes.json");
-
             foreach (var item in listOfIndawoes)
                 item.images = db.Images.Where(x => x.indawoId == item.id).ToList();
+
+            if (!string.IsNullOrEmpty(filter) && filters.Contains(filter)) {
+                if (filter == "distance")
+                    listOfIndawoes = listOfIndawoes.OrderBy(x => x.distance).ToList();
+                else if (filter == "rating")
+                    listOfIndawoes = listOfIndawoes.OrderByDescending(x => x.rating).ToList();
+                else if (filter == "damage")
+                    listOfIndawoes = listOfIndawoes.OrderBy(x => x.entranceFee).ToList();
+            }
             return listOfIndawoes;
         }
 
@@ -49,8 +68,8 @@ namespace Ziwava.Controllers
         [ResponseType(typeof(Indawo))]
         public IHttpActionResult GetIndawo(int id)
         {
-            //Indawo indawo = db.Indawoes.Find(id);
-            Indawo indawo = LoadJson(@"C:\Users\sibongisenib\Documents\ImportantRecentProjects\listOfIndawoes.json").First(x => x.id == id);
+            Indawo indawo = db.Indawoes.Find(id);
+            //Indawo indawo = LoadJson(@"C:\Users\sibongisenib\Documents\ImportantRecentProjects\listOfIndawoes.json").First(x => x.id == id);
             if (indawo == null)
             {
                 return NotFound();
@@ -91,21 +110,6 @@ namespace Ziwava.Controllers
                 }
             }
             return StatusCode(HttpStatusCode.NoContent);
-        }
-
-        // POST: api/Indawoes
-        [ResponseType(typeof(Indawo))]
-        public List<Indawo> PostIndawo(string userLocation, string distance)
-        {
-            var format = new NumberFormatInfo();
-            format.NegativeSign = "-";
-            format.NumberDecimalSeparator = ".";
-            var lon = userLocation.Split(',')[0];
-            var lat = userLocation.Split(',')[1];
-
-            var listOfIndawo = Helper.GetNearByLocations(lat, lon, Convert.ToInt32(distance), db);
-
-            return listOfIndawo;
         }
 
         private List<Indawo> getPlacesWithInDistance(string userLocation, List<Indawo> listOfIndawo, string distance)

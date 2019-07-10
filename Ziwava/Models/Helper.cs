@@ -12,24 +12,30 @@ namespace Ziwava.Models
 {
     public static class Helper
     {
-        public static List<Indawo> GetNearByLocations(string Currentlat, string Currentlng,int distance,ZiwavaContext db)
+        public static List<Indawo> GetNearByLocations(string Currentlat, string Currentlng,int distance,List<Indawo> indawo,string vibe)
         {
             var currentLocation = DbGeography.FromText("POINT( " + Currentlng + " " + Currentlat + " )");
-            var indawo = db.Indawoes.ToList();
-            var userLocationLat = Convert.ToDouble(Currentlat, CultureInfo.InvariantCulture);
-            var userLocationLong = Convert.ToDouble(Currentlng, CultureInfo.InvariantCulture);
-
-            foreach (var item in indawo)
+            try
             {
-                var locationLat = Convert.ToDouble(item.lat, CultureInfo.InvariantCulture);
-                var locationLon = Convert.ToDouble(item.lon, CultureInfo.InvariantCulture);
-                var ndawoLocation = DbGeography.FromText("POINT( " + item.lon + " " + item.lat + " )");
-                var distanceToIndawo = distanceToo(locationLat, locationLon, userLocationLat, userLocationLong, 'K');
-                item.geoLocation = DbGeography.FromText("POINT( " + item.lon + " " + item.lat + " )");
-                item.distance = Math.Round(distanceToIndawo);
+                var userLocationLat = Convert.ToDouble(Currentlat, CultureInfo.InvariantCulture);
+                var userLocationLong = Convert.ToDouble(Currentlng, CultureInfo.InvariantCulture);
+
+                foreach (var item in indawo)
+                {
+                    var locationLat = Convert.ToDouble(item.lat, CultureInfo.InvariantCulture);
+                    var locationLon = Convert.ToDouble(item.lon, CultureInfo.InvariantCulture);
+                    var ndawoLocation = DbGeography.FromText("POINT( " + item.lon + " " + item.lat + " )");
+                    var distanceToIndawo = distanceToo(locationLat, locationLon, userLocationLat, userLocationLong, 'K');
+                    item.geoLocation = DbGeography.FromText("POINT( " + item.lon + " " + item.lat + " )");
+                    item.distance = Math.Round(distanceToIndawo);
+                }
+                List<Indawo> nearLocations = getPlacesWithIn(indawo, distance);
+                return nearLocations;
             }
-            List<Indawo> nearLocations = getPlacesWithIn(indawo,distance);
-            return  nearLocations;
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message); 
+            }
         }
 
         private static List<Indawo> getPlacesWithIn(List<Indawo> indawo,int distance)
