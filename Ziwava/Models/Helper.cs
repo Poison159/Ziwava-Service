@@ -12,7 +12,7 @@ namespace Ziwava.Models
 {
     public static class Helper
     {
-        public static List<Indawo> GetNearByLocations(string Currentlat, string Currentlng,int distance,List<Indawo> indawo,string vibe)
+        public static List<Indawo> GetNearByLocations(string Currentlat, string Currentlng,int distance,List<Indawo> indawo)
         {
             var currentLocation = DbGeography.FromText("POINT( " + Currentlng + " " + Currentlat + " )");
             try
@@ -35,6 +35,21 @@ namespace Ziwava.Models
             catch (Exception ex)
             {
                 throw new Exception(ex.Message); 
+            }
+        }
+
+        private static Random rng = new Random();
+
+        public static void Shuffle<T>(this List<T> list)
+        {
+            int n = list.Count;
+            while (n > 1)
+            {
+                n--;
+                int k = rng.Next(n + 1);
+                T value = list[k];
+                list[k] = list[n];
+                list[n] = value;
             }
         }
 

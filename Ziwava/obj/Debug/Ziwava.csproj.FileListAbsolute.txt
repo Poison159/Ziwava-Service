@@ -274,3 +274,7 @@ C:\Users\Siya\Documents\Ziwava\Ziwava\obj\Debug\Ziwava.pdb
 C:\Users\Siya\Documents\Ziwava\Ziwava\bin\System.Web.Cors.dll
 C:\Users\Siya\Documents\Ziwava\Ziwava\bin\System.Web.Http.Cors.dll
 C:\Users\Siya\Documents\Ziwava\Ziwava\bin\System.Web.Http.Cors.xml
+C:\Users\Siya\Documents\Ziwava\Ziwava\bin\Microsoft.AspNet.Identity.Core.dll
+C:\Users\Siya\Documents\Ziwava\Ziwava\bin\Microsoft.AspNet.Identity.EntityFramework.dll
+C:\Users\Siya\Documents\Ziwava\Ziwava\bin\Microsoft.AspNet.Identity.Core.xml
+C:\Users\Siya\Documents\Ziwava\Ziwava\bin\Microsoft.AspNet.Identity.EntityFramework.xml

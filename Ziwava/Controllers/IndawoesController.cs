@@ -25,24 +25,28 @@ namespace Ziwava.Controllers
         // GET: api/Indawoes
         public List<Indawo> GetIndawoes(string userLocation, string distance, string vibe, string filter)
         {
+            if (userLocation.Split(',')[0] == "undefined") {
+                return null;
+            }
             var lon = userLocation.Split(',')[0];
             var lat = userLocation.Split(',')[1];
             var vibes = new List<string>() {"Chilled","Club","Outdoor"};
             var filters = new List<string>() { "distance", "rating", "damage" };
             var locations = new List<Indawo>();
-            if (!string.IsNullOrEmpty(vibe) && vibes.Contains(vibe))
+            var rnd = new Random();
+            if (!string.IsNullOrEmpty(vibe) && vibe!="All" && vibes.Contains(vibe))
             {
                 locations = db.Indawoes.Where(x => x.type == vibe).ToList();
             }
             else {
-                locations = db.Indawoes.ToList();
+                locations = db.Indawoes.ToList().OrderBy(x => rnd.Next()).ToList();
             }
-            var listOfIndawoes = Helper.GetNearByLocations(lat, lon,Convert.ToInt32(distance), locations, vibe); // TODO: Use distance to narrow search
+            var listOfIndawoes = Helper.GetNearByLocations(lat, lon,Convert.ToInt32(distance), locations); // TODO: Use distance to narrow search
             //var listOfIndawoes = LoadJson(@"C:\Users\sibongisenib\Documents\ImportantRecentProjects\listOfIndawoes.json");
             foreach (var item in listOfIndawoes)
                 item.images = db.Images.Where(x => x.indawoId == item.id).ToList();
 
-            if (!string.IsNullOrEmpty(filter) && filters.Contains(filter)) {
+            if (!string.IsNullOrEmpty(filter) && filter != "None" && filters.Contains(filter)) {
                 if (filter == "distance")
                     listOfIndawoes = listOfIndawoes.OrderBy(x => x.distance).ToList();
                 else if (filter == "rating")
@@ -50,6 +54,7 @@ namespace Ziwava.Controllers
                 else if (filter == "damage")
                     listOfIndawoes = listOfIndawoes.OrderBy(x => x.entranceFee).ToList();
             }
+            
             return listOfIndawoes;
         }
 

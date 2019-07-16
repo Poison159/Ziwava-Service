@@ -36,6 +36,7 @@ namespace Ziwava.Models
         [Required]
         public string instaHandle { get; set; }
         public List<Image> images { get; set; }
+        public List<Event> events { get; set; }
         [NotMapped]
         public HttpPostedFileBase imageUpload { get; set; }
         [NotMapped]
